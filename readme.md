@@ -1,6 +1,8 @@
 Figson
 ======
 
+[![Build Status](https://travis-ci.org/declandewet/figson.svg?branch=master)](https://travis-ci.org/declandewet/figson)
+
 Simple config storage (warning: temporary synchronous API).
 
 > **Note:** This project is in early development, and versioning is a little
