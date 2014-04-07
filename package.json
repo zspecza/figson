@@ -26,7 +26,10 @@
   },
   "scripts": {
     "test": "mocha",
-    "coveralls": "cake build && istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage && cake unbuild"
+    "build": "mv lib src && coffee -o lib -c src",
+    "unbuild": "rm -rf lib && mv src lib",
+    "release": "npm run build && npm publish . && npm run unbuild",
+    "coveralls": "npm run build && istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage && npm run unbuild"
   },
   "engines": {
     "node": ">=0.10.0"
