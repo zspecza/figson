@@ -1,8 +1,7 @@
 {exec}   = require 'child_process'
-{EOL}    = require 'os'
 
 run = (commands) ->
-  commands = commands.split("#{EOL}").join ' && '
+  commands = commands.split('\n').join ' && '
   child = exec commands
   child.stderr.on 'data', (data) ->
     process.stderr.write data
