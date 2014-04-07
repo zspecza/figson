@@ -2,6 +2,7 @@ Figson
 ======
 
 [![Build Status](https://travis-ci.org/declandewet/figson.svg?branch=master)](https://travis-ci.org/declandewet/figson)
+[![NPM version](https://badge.fury.io/js/figson.svg)](http://badge.fury.io/js/figson)
 
 Simple config storage (warning: temporary synchronous API).
 
