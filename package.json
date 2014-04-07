@@ -25,7 +25,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coveralls": "cake build && istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage && cake unbuild"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -33,7 +34,10 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "coffee-script": "^1.7.1",
-    "mocha": "^1.18.2"
+    "mocha": "^1.18.2",
+    "mocha-lcov-reporter": "0.0.1",
+    "istanbul": "^0.2.7",
+    "coveralls": "^2.10.0"
   },
   "dependencies": {
     "lodash": "^2.4.1",
