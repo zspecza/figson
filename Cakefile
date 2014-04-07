@@ -1,7 +1,8 @@
 {exec}   = require 'child_process'
+{EOL}    = require 'os'
 
 run = (commands) ->
-  commands = commands.split('\n').join ' && '
+  commands = commands.split("#{EOL}").join ' && '
   child = exec commands
   child.stderr.on 'data', (data) ->
     process.stderr.write data
@@ -21,11 +22,9 @@ task 'unbuild', ->
       """
 
 task 'publish', ->
-  console.log 'building and publishing...'
   run """
       cake build
       npm publish .
       cake unbuild
       """
-  console.log "published."
 

@@ -1,8 +1,8 @@
-should = require('chai').should()
-fs = require 'fs'
-path = require 'path'
-figson = require '..'
-EOL = require('os').EOL
+should   = require('chai').should()
+fs       = require 'fs'
+path     = require 'path'
+figson   = require '..'
+EOL      = require('os').EOL
 
 testPath = path.join __dirname, 'fixtures'
 configFile = path.join testPath, 'config.json'
