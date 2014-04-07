@@ -4,6 +4,7 @@ Figson
 [![Build Status](https://travis-ci.org/declandewet/figson.svg?branch=master)](https://travis-ci.org/declandewet/figson)
 [![NPM version](https://badge.fury.io/js/figson.svg)](http://badge.fury.io/js/figson)
 [![Dependency Status](https://david-dm.org/declandewet/figson.png?theme=shields.io)](https://david-dm.org/jenius/roots)
+[![Coverage Status](https://coveralls.io/repos/declandewet/figson/badge.png)](https://coveralls.io/r/declandewet/figson)
 
 Simple config storage (warning: temporary synchronous API).
 
