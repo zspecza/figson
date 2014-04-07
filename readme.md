@@ -35,7 +35,7 @@ out why.
 
 ### Installation
 
-```
+```shell
 $ npm install figson --save
 ```
 
