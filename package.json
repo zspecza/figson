@@ -3,8 +3,27 @@
   "version": "0.0.0",
   "description": "Simple config file storage.",
   "author": "Declan de Wet <declandewet@me.com>",
+  "keywords": [
+    "config",
+    "json",
+    "cson",
+    "yaml",
+    "configuration",
+    "configure"
+  ],
   "main": "index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/declandewet/figson"
+  },
+  "bugs": {
+    "url": "http://github.com/declandewet/figson/issues",
+    "email": "declandewet@me.com"
+  },
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "test": "mocha"
   },
