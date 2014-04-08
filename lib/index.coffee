@@ -1,2 +1,2 @@
-Figson = require './figson'
-module.exports = (f) -> new Figson(f)
+Parser = require './parser'
+module.exports = new Parser()

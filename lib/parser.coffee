@@ -12,7 +12,7 @@ class Parser
         try
           data = JSON.parse(contents)
           callback(null, new Config(file, data))
-        catch(e)
-          callback(e, null)
+        catch error
+          callback(error, null)
 
-module.exports = new Parser()
+module.exports = Parser
