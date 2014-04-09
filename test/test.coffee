@@ -25,43 +25,46 @@ makeJSON = (fooProp) ->
 
 describe 'basic', ->
 
-  it 'should get a property', ->
+  after -> fs.writeFileSync configFile, makeJSON 'bar'
+
+  it 'should get a property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) -> config.get('foo').should.equal('bar')
-      .done null, console.error.bind(console)
+      .done (-> done()), done
 
-  it 'should set a property', ->
+  it 'should set a property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) ->
         config.set('fizz', 'buzz')
         config.data.fizz.should.equal('buzz')
-      .done null, console.error.bind(console)
+      .done (-> done()), done
 
-  it 'should destroy a property', ->
+  it 'should destroy a property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) ->
         config.destroy('foo')
         should.not.exist(config.data.foo)
-      .done null, console.error.bind(console)
+      .done (-> done()), done
 
-  it 'should update a property', ->
+  it 'should update a property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) ->
         config.update('foo', 'zoidberg')
         config.data.foo.should.equal('zoidberg')
-      .done null, console.error.bind(console)
+      .done (-> done()), done
 
-  it 'should throw an error when updating a non-existent property', ->
+  it 'should throw an error when updating a non-existent property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) -> (-> config.update('zar', 'zam')).should.throw(Error)
-      .done null, console.error.bind(console)
+      .done (-> done()), done
 
-  it 'should save to a file', ->
+  it 'should save to a file', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) ->
-        config.update('foo', 'saved')
-        nodefn.call config.save
+        config.update 'foo', 'saved'
+        nodefn.call(config.save.bind(config))
       .then -> nodefn.call(fs.readFile, configFile, encoding: 'utf8')
-      .tap (contents) -> contents.should.equal(makeJSON 'saved')
-      .done null, console.error.bind(console)
+      .then (contents) ->
+        contents.should.equal(makeJSON 'saved')
+      .done (-> done()), done
 

@@ -1,4 +1,5 @@
 .DS_Store
+_figson.coffee
 
 # Logs
 logs

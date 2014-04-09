@@ -21,10 +21,6 @@ class Config
     @set(key, undefined)
 
   save: (callback) ->
-    fs.writeFile @file, JSON.stringify(@data, null, 2), (error) ->
-      if error
-        callback(error)
-      else
-        callback(null)
+    fs.writeFile(@file, JSON.stringify(@data, null, 2), callback)
 
 module.exports = Config
