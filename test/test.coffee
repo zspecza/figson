@@ -1,59 +1,67 @@
 should   = require('chai').should()
 fs       = require 'fs'
 path     = require 'path'
+nodefn   = require 'when/node'
 figson   = require '..'
-EOL      = require('os').EOL
 
 testPath = path.join __dirname, 'fixtures'
 configFile = path.join testPath, 'config.json'
 
-before ->
-  @config = figson configFile
+makeJSON = (fooProp) ->
+  return """
+  {
+    "foo": "#{fooProp}",
+    "long": {
+      "deeply": {
+        "nested": {
+          "property": [
+            "support"
+          ]
+        }
+      }
+    }
+  }
+  """
 
-afterEach ->
-  fs.writeFileSync configFile, "{#{EOL}  \"foo\": \"bar\"#{EOL}}"
+describe 'basic', ->
 
-describe 'basic figson functionality', ->
+  it 'should get a property', ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) -> config.get('foo').should.equal('bar')
+      .done null, console.error.bind(console)
 
-  it 'should parse a json file', ->
-    @config.data.foo.should.equal('bar')
+  it 'should set a property', ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) ->
+        config.set('fizz', 'buzz')
+        config.data.fizz.should.equal('buzz')
+      .done null, console.error.bind(console)
 
-  it 'should set a key', ->
-    @config.set 'baz', 'buz'
-    @config.data.baz.should.equal('buz')
+  it 'should destroy a property', ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) ->
+        config.destroy('foo')
+        should.not.exist(config.data.foo)
+      .done null, console.error.bind(console)
 
-  it 'should get a key', ->
-    @config.get('baz').should.equal('buz')
+  it 'should update a property', ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) ->
+        config.update('foo', 'zoidberg')
+        config.data.foo.should.equal('zoidberg')
+      .done null, console.error.bind(console)
 
-  it 'should destroy a key', ->
-    @config.destroy('baz')
-    should.not.exist @config.data.baz
+  it 'should throw an error when updating a non-existent property', ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) -> (-> config.update('zar', 'zam')).should.throw(Error)
+      .done null, console.error.bind(console)
 
-  it 'should update a key', ->
-    @config.update('foo', '50cent')
-    @config.data.foo.should.equal('50cent')
+  it 'should save to a file', ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) ->
+        config.update('foo', 'saved')
+        nodefn.call config.save
+      .then -> nodefn.call(fs.readFile, configFile, encoding: 'utf8')
+      .tap (contents) -> contents.should.equal(makeJSON 'saved')
+      .done null, console.error.bind(console)
 
-  it 'should throw an error when updating a non-existent key', ->
-    should.Throw -> @config.update('fred')
-
-describe 'works with different types', ->
-
-  it 'should set an array', ->
-    arr = ['one', 2, 'three']
-    @config.set 'arr', arr
-    @config.data.arr.should.equal(arr)
-
-  it 'should set an object', ->
-    obj = { name: 'Jim' }
-    @config.set 'person', obj
-    @config.data.person.should.equal(obj)
-
-describe 'complex figson functionality', ->
-
-  it 'should support deep properties', ->
-    @config.set('this.is.deeply.nested', 'one')
-    @config.get('this.is.deeply.nested').should.equal 'one'
-
-  it 'should support deep array properties', ->
-    @config.set('this.is.deeply.arr[0]', 'first item')
-    @config.get('this.is.deeply.arr[0]').should.equal 'first item'

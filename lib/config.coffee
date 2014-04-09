@@ -1,5 +1,5 @@
-props  = require 'pathval'
-fs     = require 'fs'
+props    = require 'pathval'
+fs       = require 'fs'
 
 class Config
 
@@ -21,15 +21,10 @@ class Config
     @set(key, undefined)
 
   save: (callback) ->
-    data = undefined
-    try
-      data = JSON.stringify(@data, null, 2)
-      fs.writeFile @file, data, (error) ->
-        if error
-          callback(error)
-        else
-          callback(null)
-    catch error
-      callback(error)
+    fs.writeFile @file, JSON.stringify(@data, null, 2), (error) ->
+      if error
+        callback(error)
+      else
+        callback(null)
 
 module.exports = Config
