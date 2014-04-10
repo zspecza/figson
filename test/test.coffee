@@ -27,6 +27,12 @@ describe 'basic', ->
 
   after -> fs.writeFileSync configFile, makeJSON 'bar'
 
+  it 'should expose the data object', (done) ->
+    nodefn.call(figson.parse, configFile)
+      .then (config) ->
+        config.data.should.deep.equal(JSON.parse(makeJSON('bar')))
+      .done (-> done()), done
+
   it 'should get a property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) -> config.get('foo').should.equal('bar')
@@ -56,6 +62,12 @@ describe 'basic', ->
   it 'should throw an error when updating a non-existent property', (done) ->
     nodefn.call(figson.parse, configFile)
       .then (config) -> (-> config.update('zar', 'zam')).should.throw(Error)
+      .done (-> done()), done
+
+  it 'should work with deep nested properties and arrays', (done) ->
+    nodefn.call figson.parse, configFile
+      .then (config) ->
+        config.get('long.deeply.nested.property[0]').should.equal('support')
       .done (-> done()), done
 
   it 'should save to a file', (done) ->
