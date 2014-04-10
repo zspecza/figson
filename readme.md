@@ -5,7 +5,7 @@ Figson
 [![NPM version](https://badge.fury.io/js/figson.svg)](http://badge.fury.io/js/figson)
 [![Dependency Status](https://david-dm.org/declandewet/figson.svg)](https://david-dm.org/declandewet/figson)
 [![devDependency Status](https://david-dm.org/declandewet/figson/dev-status.svg)](https://david-dm.org/declandewet/figson#info=devDependencies)
-[![Coverage Status](https://coveralls.io/repos/declandewet/figson/badge.png)](https://coveralls.io/r/declandewet/figson)
+[![Coverage Status](https://coveralls.io/repos/declandewet/figson/badge.png?branch=master)](https://coveralls.io/r/declandewet/figson)
 
 Simple config storage (warning: temporary synchronous API).
 
