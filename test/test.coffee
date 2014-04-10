@@ -23,9 +23,9 @@ makeJSON = (fooProp) ->
   }
   """
 
-describe 'basic', ->
+afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
 
-  after -> fs.writeFileSync configFile, makeJSON 'bar'
+describe 'basic async', ->
 
   it 'should expose the data object', (done) ->
     nodefn.call(figson.parse, configFile)
@@ -80,3 +80,42 @@ describe 'basic', ->
         contents.should.equal(makeJSON 'saved')
       .done (-> done()), done
 
+describe 'basic sync', ->
+
+  it 'should expose the data object', ->
+    config = figson.parseSync(configFile)
+    config.data.should.deep.equal(JSON.parse(makeJSON('bar')))
+
+  it 'should get a property', ->
+    config = figson.parseSync(configFile)
+    config.get('foo').should.equal('bar')
+
+  it 'should set a property', ->
+    config = figson.parseSync(configFile)
+    config.set('fizz', 'buzz')
+    config.data.fizz.should.equal('buzz')
+
+  it 'should destroy a property', ->
+    config = figson.parseSync(configFile)
+    config.destroy('foo')
+    should.not.exist(config.data.foo)
+
+  it 'should update a property', ->
+    config = figson.parseSync(configFile)
+    config.update('foo', 'zoidberg')
+    config.data.foo.should.equal('zoidberg')
+
+  it 'should throw an error when updating a non-existent property', ->
+    config = figson.parseSync(configFile)
+    (-> config.update('zar', 'zam')).should.throw(Error)
+
+  it 'should work with deep nested properties and arrays', ->
+    config = figson.parseSync(configFile)
+    config.get('long.deeply.nested.property[0]').should.equal('support')
+
+  it 'should save to a file', ->
+    config = figson.parseSync(configFile)
+    config.update 'foo', 'saved'
+    config.save()
+    contents = fs.readFileSync configFile, encoding: 'utf8'
+    contents.should.equal(makeJSON 'saved')
