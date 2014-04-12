@@ -23,9 +23,9 @@ makeJSON = (fooProp) ->
   }
   """
 
-afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
+describe 'async', ->
 
-describe 'basic async', ->
+  afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
 
   it 'should expose the data object', (done) ->
     nodefn.call(figson.parse, configFile)
@@ -35,7 +35,7 @@ describe 'basic async', ->
 
   it 'should get a property', (done) ->
     nodefn.call(figson.parse, configFile)
-      .then (config) -> config.get('foo').should.equal('bar')
+      .then (config) -> config.get('foo').val().should.equal('bar')
       .done (-> done()), done
 
   it 'should set a property', (done) ->
@@ -67,7 +67,7 @@ describe 'basic async', ->
   it 'should work with deep nested properties and arrays', (done) ->
     nodefn.call figson.parse, configFile
       .then (config) ->
-        config.get('long.deeply.nested.property[0]').should.equal('support')
+        config.get('long.deeply.nested.property[0]').val().should.equal('support')
       .done (-> done()), done
 
   it 'should save to a file', (done) ->
@@ -80,7 +80,9 @@ describe 'basic async', ->
         contents.should.equal(makeJSON 'saved')
       .done (-> done()), done
 
-describe 'basic sync', ->
+describe 'sync', ->
+
+  afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
 
   it 'should expose the data object', ->
     config = figson.parseSync(configFile)
@@ -88,7 +90,7 @@ describe 'basic sync', ->
 
   it 'should get a property', ->
     config = figson.parseSync(configFile)
-    config.get('foo').should.equal('bar')
+    config.get('foo').val().should.equal('bar')
 
   it 'should set a property', ->
     config = figson.parseSync(configFile)
@@ -111,7 +113,7 @@ describe 'basic sync', ->
 
   it 'should work with deep nested properties and arrays', ->
     config = figson.parseSync(configFile)
-    config.get('long.deeply.nested.property[0]').should.equal('support')
+    config.get('long.deeply.nested.property[0]').val().should.equal('support')
 
   it 'should save to a file', ->
     config = figson.parseSync(configFile)
