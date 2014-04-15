@@ -4,8 +4,7 @@ path     = require 'path'
 nodefn   = require 'when/node'
 figson   = require '..'
 
-testPath = path.join __dirname, 'fixtures'
-configFile = path.join testPath, 'config.json'
+configFile = path.join __dirname, 'fixtures', 'config.json'
 
 makeJSON = (fooProp) ->
   return """
