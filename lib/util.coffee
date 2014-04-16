@@ -9,9 +9,8 @@ exports.flatten_object = (ob) ->
   to_return = {}
   flag = false
   for own i of ob
-    if _.isObject(ob[i])
-      if _.isArray(ob[i]) then to_return["#{i}[#{y}]"] = x for x, y in ob[i]
-      else
+    if _.isArray(ob[i]) then to_return["#{i}[#{y}]"] = x for x, y in ob[i]
+    else if _.isObject(ob[i])
         flat_object = exports.flatten_object(ob[i])
         to_return["#{i}.#{x}"] = flat_object[x] for own x of flat_object
     else
