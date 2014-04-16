@@ -1,8 +1,9 @@
-should   = require('chai').should()
-fs       = require 'fs'
-path     = require 'path'
-nodefn   = require 'when/node'
-figson   = require '..'
+should                        = require('chai').should()
+fs                            = require 'fs'
+path                          = require 'path'
+nodefn                        = require 'when/node'
+{ends_with, flatten_object}   = require '../lib/util'
+figson                        = require '..'
 
 configFile = path.join __dirname, 'fixtures', 'config.json'
 
@@ -134,3 +135,23 @@ describe 'sync', ->
     config.save()
     contents = fs.readFileSync configFile, encoding: 'utf8'
     contents.should.equal(makeJSON 'saved')
+
+describe 'utils', ->
+
+  it 'ends_with should return true if a string ends with another string', ->
+    ends_with('this is a string', 'a string').should.equal(true)
+
+  it 'flatten_object should flatten deep objects to one level', ->
+    obj =
+      deep:
+        nested:
+          property: 'support'
+        with:
+          support: [{
+            for: 'arrays'
+          }]
+    flattened_obj =
+      'deep.nested.property': 'support'
+      'deep.with.support[0].for': 'arrays'
+
+    flatten_object(obj).should.deep.equal(flattened_obj)
