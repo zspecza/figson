@@ -46,109 +46,91 @@ chain_methods = (c) ->
   c.update('something else').get().val().should.equal('something else')
   should.not.exist(c.destroy().get().val())
 
+afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
+
 describe 'async', ->
 
-  afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
+  beforeEach -> @config = nodefn.call(figson.parse, configFile)
 
   it 'should expose the data object', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then expose_data
-      .done (-> done()), done
+    @config.then expose_data
+           .done (-> done()), done
 
   it 'should get a property', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then get_property
-      .done (-> done()), done
+    @config.then get_property
+           .done (-> done()), done
 
   it 'should set a property', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then set_property
-      .done (-> done()), done
+    @config.then set_property
+           .done (-> done()), done
 
   it 'should destroy a property', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then destroy_property
-      .done (-> done()), done
+    @config.then destroy_property
+           .done (-> done()), done
 
   it 'should update a property', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then update_property
-      .done (-> done()), done
+    @config.then update_property
+           .done (-> done()), done
 
   it 'should throw an error when updating a non-existent property', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then cause_update_error
-      .done (-> done()), done
+    @config.then cause_update_error
+           .done (-> done()), done
 
   it 'should work with deep nested properties and arrays', (done) ->
-    nodefn.call figson.parse, configFile
-      .then set_deep_property
-      .done (-> done()), done
+    @config.then set_deep_property
+           .done (-> done()), done
 
   it 'should work with find syntax', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then use_find
-      .done (-> done()), done
+    @config.then use_find
+           .done (-> done()), done
 
   it 'should support method chaining', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then chain_methods
-      .done (-> done()), done
+    @config.then chain_methods
+           .done (-> done()), done
 
   it 'should save to a file', (done) ->
-    nodefn.call(figson.parse, configFile)
-      .then (config) ->
-        config.update 'foo', 'saved'
-        nodefn.call(config.save.bind(config))
-      .then -> nodefn.call(fs.readFile, configFile, encoding: 'utf8')
-      .then (contents) ->
-        contents.should.equal(makeJSON 'saved')
-      .done (-> done()), done
+    @config.then (config) ->
+             config.update 'foo', 'saved'
+             nodefn.call(config.save.bind(config))
+           .then -> nodefn.call(fs.readFile, configFile, encoding: 'utf8')
+           .then (contents) ->
+             contents.should.equal(makeJSON 'saved')
+           .done (-> done()), done
 
 describe 'sync', ->
 
-  afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
+  beforeEach -> @config = figson.parse(configFile)
 
   it 'should expose the data object', ->
-    config = figson.parseSync(configFile)
-    expose_data config
+    expose_data @config
 
   it 'should get a property', ->
-    config = figson.parseSync(configFile)
-    get_property config
+    get_property @config
 
   it 'should set a property', ->
-    config = figson.parseSync(configFile)
-    set_property config
+    set_property @config
 
   it 'should destroy a property', ->
-    config = figson.parseSync(configFile)
-    destroy_property config
+    destroy_property @config
 
   it 'should update a property', ->
-    config = figson.parseSync(configFile)
-    update_property config
+    update_property @config
 
   it 'should throw an error when updating a non-existent property', ->
-    config = figson.parseSync(configFile)
-    cause_update_error config
+    cause_update_error @config
 
   it 'should work with deep nested properties and arrays', ->
-    config = figson.parseSync(configFile)
-    set_deep_property config
+    set_deep_property @config
 
   it 'should work with find syntax', ->
-    config = figson.parseSync(configFile)
-    use_find config
+    use_find @config
 
   it 'should support method chaining', ->
-    config = figson.parseSync(configFile)
-    chain_methods config
+    chain_methods @config
 
   it 'should save to a file', ->
-    config = figson.parseSync(configFile)
-    config.update 'foo', 'saved'
-    config.save()
+    @config.update 'foo', 'saved'
+    @config.save()
     contents = fs.readFileSync configFile, encoding: 'utf8'
     contents.should.equal(makeJSON 'saved')
 
