@@ -7,7 +7,7 @@ Figson
 [![devDependency Status](https://david-dm.org/declandewet/figson/dev-status.svg)](https://david-dm.org/declandewet/figson#info=devDependencies)
 [![Coverage Status](https://coveralls.io/repos/declandewet/figson/badge.png?branch=master)](https://coveralls.io/r/declandewet/figson)
 
-Simple config storage (warning: temporary synchronous API).
+Simple configuration storage.
 
 > **Note:** This project is in early development, and versioning is a little
   different. [Read this](http://markup.im/#q4_cRZ1Q) for more details.
@@ -28,7 +28,37 @@ $ npm install figson --save
 Usage
 -----
 
-### Figson
+### Async Example
+
+```javascript
+var figson = require('figson');
+var path   = require('path');
+
+figson.parse(path.resolve('./config.json'), function(error, config) {
+  if (error) { throw error; }
+  config.set('foo', 'bar');
+  config.save(function(error) {
+    if (error) { throw error; }
+  });
+});
+```
+
+### Sync Example
+
+```javascript
+var figson = require('figson');
+var path   = require('path');
+
+try {
+  var config = figson.parseSync(path.resolve('./config.json');
+  config.set('foo', 'bar');
+  config.save();
+} catch (error) {
+  throw error;
+}
+```
+
+### Figson API
 
 Figson itself exposes two methods:
 
@@ -40,10 +70,10 @@ to the file.
 #### figson.parseSync(config_file)
 Synchronous version of `figson.parse`. Returns a `config` object.
 
-### Config
+### Config API
 
 The `config` object is basically just a tiny wrapper around the data inside
-the JSON file. It exposes a few properties and methods. All of `config`s methods
+the JSON file. It exposes a few properties and methods. All of `config`'s methods
 are chainable, and accessing a property with a `config` method uses a tiny
 DSL string similar to how you would access that property using JavaScript's dot
 notation.
@@ -71,7 +101,7 @@ config.get().val() // => value1
 
 #### config.set([key], value)
 
-Sets the `key` to the value. If no `key` is given, uses the most recent key
+Sets the `key` to the `value`. If no `key` is given, uses the most recent key
 in the chain. The `value` can be a string, number, object, array or null.
 
 Example:
@@ -86,13 +116,29 @@ config.set('a different value') // { an: { array: { property: ['a different valu
 
 #### config.update([key], value)
 
-First, attempts a `get()` to determine the existence of the property. If it
-exists, it will then call `set()` with the new value. Otherwise, throws an error.
-Useful if you need to safely set a value.
+First, attempts a `get()` to determine the existence of the given `key` property. If it
+exists, it will then call `set()` with the new `value`. Otherwise, throws an error.
+Useful if you need to safely set a value. If no `key` is given, updates the
+`key` from the last call in the chain.
+
+Example:
+
+```javascript
+config.update('foo', 'baz')
+config.get('foo').update('baz')
+```
 
 #### config.destroy([key])
 
-"deletes" the property by setting it's value to `undefined`.
+"deletes" the given `key` property by setting it's value to `undefined`. If no
+key is given, it will "delete" the key from the last method in the chain.
+
+Example:
+
+```javascript
+config.destroy('foo');
+config.get('bar').destroy()
+```
 
 #### config.find(partial_key)
 
@@ -124,8 +170,24 @@ config.find('nested.property').set('foobar') // done!
 #### config.save([callback])
 
 This saves the current state of `config.data` to the JSON file. This is a synchronous
-operation, but passing in an option callback (`function(error) {}`) will make it
-asynchronous.
+operation, but passing in an optional callback (`function(error) {}`) will make it
+perform asynchronously.
+
+Example:
+
+```javascript
+config.save(); // synchronous
+
+// asynchronous
+config.save(function(error) {
+  if (error) { throw error; }
+});
+```
+
+Contributing:
+-------------
+
+Please read the [contribution guidelines](https://github.com/declandewet/figson/blob/master/contributing.md).
 
 Roadmap:
 --------
