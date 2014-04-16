@@ -40,3 +40,31 @@ If you can make these parts better, you are welcome to.
 - `destroy` - This currently only "destroys" a property by setting it's value
   to `undefined`. It would be nice if it actually deleted the property entirely.
   [link](https://github.com/declandewet/figson/blob/master/lib/config.coffee#L86-L89)
+
+Miscellaneous
+-------------
+
+The current way you pass a file path to `figson.parse` kind of requires you
+to resolve that path to an absolute path first. For example:
+
+```javascript
+var figson = require('figson');
+var path   = require('path');
+
+figson.parse(path.resolve('./config.json'), function(error, config) {
+
+});
+```
+
+It would be nice to not have to resolve that path, and I feel like this could
+be done using Node's `module.parent`, so that this syntax will work:
+
+```javascript
+var figson = require('figson');
+
+figson.parse('./config.js', function(error, config) {
+
+});
+```
+
+If you know how to do this, please submit a PR! :)
