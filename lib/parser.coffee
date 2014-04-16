@@ -3,7 +3,7 @@ Config   = require './config'
 nodefn   = require 'when/node'
 
 ###*
- * @class
+ * @class Parser
 ###
 class Parser
 

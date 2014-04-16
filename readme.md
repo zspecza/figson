@@ -28,106 +28,106 @@ $ npm install figson --save
 Usage
 -----
 
-### Asynchronous:
+### Figson
+
+Figson itself exposes two methods:
+
+#### figson.parse(config_file, callback);
+Asynchronously reads a JSON file, parses it, and exposes an `error` and a `config`
+object to the callback (`function(error, config) {}`). `config_file` is the path
+to the file.
+
+#### figson.parseSync(config_file)
+Synchronous version of `figson.parse`. Returns a `config` object.
+
+### Config
+
+The `config` object is basically just a tiny wrapper around the data inside
+the JSON file. It exposes a few properties and methods. All of `config`s methods
+are chainable, and accessing a property with a `config` method uses a tiny
+DSL string similar to how you would access that property using JavaScript's dot
+notation.
+
+#### config.data
+An object representing the JSON file.
+
+#### config.val()
+Returns the value of the last key/property in the `config` chain.
+
+#### config.get([key])
+Retrieves the value of the given `key`. If no key is provided, it retrieves
+the value of the last known key in the chain.
+
+`key` is a string containing the object property who's value you want to retrieve.
+
+Example:
 
 ```javascript
-var figson = require('figson');
-var path = require('path');
-
-// load a JSON file
-figson.parse(path.resolve('./config.json'), function(error, config) {
-
-  if (error) { throw error; }
-
-  // we now have access to the config file
-  console.log(config.data); // an object representing the file's data
-
-  // set a property
-  config.set('foo', 'bar'); // => {"foo": "bar"}
-
-  // get a property
-  config.get('foo'); // => "bar"
-
-  // update a property
-  // (this tries to get the property first & checks if it is undefined)
-  config.update('foo', 'baz'); // => {"foo": "baz"}
-  config.update('fiz', 'buzz'); // => throws an error
-
-  // delete a property
-  config.destroy('foo'); // => {} (saved to config.json)
-
-  // deeply nested properties are supported, too!
-  config.set('foo.bar.baz.bim[0]', 'bash');
-  /**
-   * outputs:
-   * {
-   *   "foo": {
-   *     "bar": {
-   *       "baz": {
-   *         "bim": ["bash"]
-   *       }
-   *     }
-   *   }
-   * }
-   */
-
-  // finally, save the file
-  config.save(function(error) {
-    if (error) { throw error; }
-  });
-
-});
+// { some: { property: 'value1' }}
+config.get('some.property').val() // => value1
+// or
+config.get().val() // => value1
 ```
 
-### Synchronous:
+#### config.set([key], value)
+
+Sets the `key` to the value. If no `key` is given, uses the most recent key
+in the chain. The `value` can be a string, number, object, array or null.
+
+Example:
 
 ```javascript
-var figson = require('figson');
-var path = require('path');
+// { an: { array: { property: [] }}}
+config.set('an.array.property[0]', 'the value') // { an: { array: { property: ['the value'] }}}
+// or
+config.set('a different value') // { an: { array: { property: ['a different value'] }}}
 
-// load a JSON file
-var config = figson.parseSync(path.resolve('./config.json'));
-
-// we now have access to the config file
-console.log(config.data); // an object representing the file's data
-
-// set a property
-config.set('foo', 'bar'); // => {"foo": "bar"}
-
-// get a property
-config.get('foo'); // => "bar"
-
-// update a property
-// (this tries to get the property first & checks if it is undefined)
-config.update('foo', 'baz'); // => {"foo": "baz"}
-config.update('fiz', 'buzz'); // => throws an error
-
-// delete a property
-config.destroy('foo'); // => {} (saved to config.json)
-
-// deeply nested properties are supported, too!
-config.set('foo.bar.baz.bim[0]', 'bash');
-/**
- * outputs:
- * {
- *   "foo": {
- *     "bar": {
- *       "baz": {
- *         "bim": ["bash"]
- *       }
- *     }
- *   }
- * }
- */
-
-// finally, save the file
-config.save();
 ```
+
+#### config.update([key], value)
+
+First, attempts a `get()` to determine the existence of the property. If it
+exists, it will then call `set()` with the new value. Otherwise, throws an error.
+Useful if you need to safely set a value.
+
+#### config.destroy([key])
+
+"deletes" the property by setting it's value to `undefined`.
+
+#### config.find(partial_key)
+
+This method is useful for accessing properties that are very deeply nested.
+Suppose you have an object:
+
+```javascript
+{
+  a: {
+    very: {
+      deeply: {
+        nested: {
+          property: 'value'
+        }
+      }
+    }
+  }
+}
+```
+
+You want to update `a.very.deeply.nested.property` to have the value `foobar`,
+but you don't want to have to type out the whole property name. Just use `.find()`!
+As long as the property ends with the key you pass to `find()`, it'll work:
+
+```javascript
+config.find('nested.property').set('foobar') // done!
+```
+
+#### config.save([callback])
+
+This saves the current state of `config.data` to the JSON file. This is a synchronous
+operation, but passing in an option callback (`function(error) {}`) will make it
+asynchronous.
 
 Roadmap:
 --------
 
-- Add CSON support
-- Add YAML support
-- possibly add XML support?
-- Add method chaining
+- Add custom handler functionality
