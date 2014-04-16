@@ -50,7 +50,7 @@ var figson = require('figson');
 var path   = require('path');
 
 try {
-  var config = figson.parseSync(path.resolve('./config.json');
+  var config = figson.parse(path.resolve('./config.json');
   config.set('foo', 'bar');
   config.save();
 } catch (error) {
@@ -60,15 +60,12 @@ try {
 
 ### Figson API
 
-Figson itself exposes two methods:
+Figson itself exposes one method:
 
-#### figson.parse(config_file, callback);
-Asynchronously reads a JSON file, parses it, and exposes an `error` and a `config`
-object to the callback (`function(error, config) {}`). `config_file` is the path
-to the file.
-
-#### figson.parseSync(config_file)
-Synchronous version of `figson.parse`. Returns a `config` object.
+#### figson.parse(config_file, [callback]);
+Asynchronously reads a JSON file (if there is a callback function), parses it,
+and exposes an `error` and a `config` object to the callback (`function(error, config) {}`).
+`config_file` is the path to the file. Omit the callback for a synchronous operation.
 
 ### Config API
 
