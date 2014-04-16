@@ -36,6 +36,8 @@ cause_update_error = (c) -> (-> c.update('zar', 'zam')).should.throw(Error)
 
 set_deep_property = (c) -> c.get('long.deeply.nested.property[0]').val().should.equal('support')
 
+use_find = (c) -> c.find('nested.property[0]').val().should.equal('support')
+
 describe 'async', ->
 
   afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
@@ -73,6 +75,11 @@ describe 'async', ->
   it 'should work with deep nested properties and arrays', (done) ->
     nodefn.call figson.parse, configFile
       .then set_deep_property
+      .done (-> done()), done
+
+  it 'should work with find syntax', (done) ->
+    nodefn.call(figson.parse, configFile)
+      .then use_find
       .done (-> done()), done
 
   it 'should save to a file', (done) ->
@@ -116,6 +123,10 @@ describe 'sync', ->
   it 'should work with deep nested properties and arrays', ->
     config = figson.parseSync(configFile)
     set_deep_property config
+
+  it 'should work with find syntax', ->
+    config = figson.parseSync(configFile)
+    use_find config
 
   it 'should save to a file', ->
     config = figson.parseSync(configFile)
