@@ -39,6 +39,13 @@ set_deep_property = (c) -> c.get('long.deeply.nested.property[0]').val().should.
 
 use_find = (c) -> c.find('nested.property[0]').val().should.equal('support')
 
+chain_methods = (c) ->
+  c.get('foo').val().should.equal('bar')
+  c.set('baz').get().val().should.equal('baz')
+  c.set('prop', 'something').get().val().should.equal('something')
+  c.update('something else').get().val().should.equal('something else')
+  should.not.exist(c.destroy().get().val())
+
 describe 'async', ->
 
   afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
@@ -81,6 +88,11 @@ describe 'async', ->
   it 'should work with find syntax', (done) ->
     nodefn.call(figson.parse, configFile)
       .then use_find
+      .done (-> done()), done
+
+  it 'should support method chaining', (done) ->
+    nodefn.call(figson.parse, configFile)
+      .then chain_methods
       .done (-> done()), done
 
   it 'should save to a file', (done) ->
@@ -128,6 +140,10 @@ describe 'sync', ->
   it 'should work with find syntax', ->
     config = figson.parseSync(configFile)
     use_find config
+
+  it 'should support method chaining', ->
+    config = figson.parseSync(configFile)
+    chain_methods config
 
   it 'should save to a file', ->
     config = figson.parseSync(configFile)
