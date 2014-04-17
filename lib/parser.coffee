@@ -1,11 +1,21 @@
 fs       = require 'fs'
 Config   = require './config'
 nodefn   = require 'when/node'
+path     = require 'path'
 
 ###*
  * @class Parser
 ###
 class Parser
+
+  constructor: ->
+    @handlers = {}
+    @handler_map = {}
+
+  addHandler: (name, config) ->
+    @handlers[name] = config
+    for extension in config.extensions
+      @handler_map[extension] = name
 
   ###*
    * reads in and then parses a file. If callback function is provided,
@@ -16,10 +26,11 @@ class Parser
    * @return {Object} - the config object representing the config file
   ###
   parse: (file, callback) ->
+    handler = get_handler.call(@, file)
     if callback?
       nodefn.call fs.readFile, file, encoding: 'utf8'
-        .then JSON.parse
-        .then (data) -> callback(null, new Config(file, data))
+        .then handler.parse
+        .then (data) -> callback(null, new Config(handler, data))
         .done null, callback.bind(callback)
         ###**
          * exposes the config object or an error if any
@@ -30,9 +41,14 @@ class Parser
     else
       try
         data = fs.readFileSync(file, encoding: 'utf8')
-        parsed_data = JSON.parse data
-        return new Config(file, parsed_data)
+        parsed_data = handler.parseSync data
+        return new Config(handler, parsed_data)
       catch error
         throw error
+
+  get_handler = (file) ->
+    handler = @handlers[@handler_map[path.extname(file)]]
+    handler.file = file
+    return handler
 
 module.exports = Parser
