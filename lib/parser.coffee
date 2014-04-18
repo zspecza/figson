@@ -9,13 +9,8 @@ path     = require 'path'
 class Parser
 
   constructor: ->
-    @handlers = {}
-    @handler_map = {}
-
-  addHandler: (name, config) ->
-    @handlers[name] = config
-    for extension in config.extensions
-      @handler_map[extension] = name
+    @handlers = {} # internal filetype handler store
+    @handler_map = {} # maps file extensions to handlers
 
   ###*
    * reads in and then parses a file. If callback function is provided,
@@ -46,6 +41,31 @@ class Parser
       catch error
         throw error
 
+  ###*
+   * adds a configuration type handler to figson, this allows you to register
+   * other filetypes as configuration. Just specify a name and pass in a
+   * config object that looks like this:
+   * {
+   *   extensions: [string] # the file extensions this handler should handle
+   *   parse: fn # the function definition to use when parsing asynchronously
+   *   parseSync: fn # the synchronous version of parse
+   *   stringify: fn # the function definition to use when serializing to a string asynchronously
+   *   stringifySync: fn the synchronous version of stringify
+   * }
+   * @param {String} name - the name of the handler
+   * @param {Object} config - the handler object
+  ###
+  addHandler: (name, config) ->
+    @handlers[name] = config # add the handler to handler store
+    for extension in config.extensions
+      @handler_map[extension] = name # map the handler's extensions to the handler
+
+  ###*
+   * matches a file's extension to the correct data handler
+   * @api private
+   * @param  {String} file - the config file's path
+   * @return {Object} handler - the handler object to use for parsing this file
+  ###
   get_handler = (file) ->
     handler = @handlers[@handler_map[path.extname(file)]]
     handler.file = file

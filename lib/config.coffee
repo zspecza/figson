@@ -101,7 +101,10 @@ class Config
        * @param {Object} error - an error, if one occured
       ###
     else
-      fs.writeFileSync(@handler.file, @handler.stringifySync(@data, null, 2))
+      try
+        fs.writeFileSync(@handler.file, @handler.stringifySync(@data, null, 2))
+      catch error
+        throw error
     return this
 
   ###*
