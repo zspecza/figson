@@ -50,7 +50,7 @@ afterEach -> fs.writeFileSync configFile, makeJSON 'bar'
 
 describe 'async', ->
 
-  beforeEach -> @config = nodefn.call(figson.parse.bind(figson), configFile)
+  beforeEach -> @config = nodefn.call(figson.parse, configFile)
 
   it 'should expose the data object', (done) ->
     @config.then expose_data
