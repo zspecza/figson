@@ -66,20 +66,20 @@ Everything will still work, and uses the exact same API as described below.
 Figson itself exposes one method:
 
 #### figson.parse(config_file, [callback]);
-Asynchronously reads a JSON file (if there is a callback function), parses it,
+Asynchronously reads a configuration file (if there is a callback function), parses it,
 and exposes an `error` and a `config` object to the callback (`function(error, config) {}`).
 `config_file` is the path to the file. Omit the callback for a synchronous operation.
 
 ### Config API
 
 The `config` object is basically just a tiny wrapper around the data inside
-the JSON file. It exposes a few properties and methods. All of `config`'s methods
+the configuration file. It exposes a few properties and methods. All of `config`'s methods
 are chainable, and accessing a property with a `config` method uses a tiny
 DSL string similar to how you would access that property using JavaScript's dot
 notation.
 
 #### config.data
-An object representing the JSON file.
+An object representing the configuration file.
 
 #### config.val()
 Returns the value of the last key/property in the `config` chain.
