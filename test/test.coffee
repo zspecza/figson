@@ -33,7 +33,9 @@ makeCSON = (fooProp) ->
     long:
       deeply:
         nested:
-          property: ["support"]
+          property: [
+            "support"
+          ]
   }
   """
 

@@ -1,5 +1,3 @@
-require('when/monitor/console')
-
 nodefn   = require 'when/node'
 W        = require 'when'
 fs       = require 'fs'
