@@ -7,7 +7,7 @@ fs                            = require 'fs'
 ###
 class Config
 
-  constructor: (@file, @data) ->
+  constructor: (@handler, @data) ->
     @_value_of_previous_key = ''
     @_previous_key = ''
     @_value_of_current_key = ''
@@ -94,14 +94,17 @@ class Config
   ###
   save: (callback) ->
     if callback?
-      fs.writeFile(@file, JSON.stringify(@data, null, 2), callback)
+      fs.writeFile(@handler.file, @handler.stringify(@data, null, 2), callback)
       ###**
        * exposes any errors that happened while saving
        * @callback Config~saveCallback
        * @param {Object} error - an error, if one occured
       ###
     else
-      fs.writeFileSync(@file, JSON.stringify(@data, null, 2))
+      try
+        fs.writeFileSync(@handler.file, @handler.stringifySync(@data, null, 2))
+      catch error
+        throw error
     return this
 
   ###*

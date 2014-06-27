@@ -1,0 +1,9 @@
+{
+  foo: "bar"
+  long:
+    deeply:
+      nested:
+        property: [
+          "support"
+        ]
+}

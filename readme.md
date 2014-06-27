@@ -15,7 +15,7 @@ Simple configuration storage.
 ### Why should you care?
 
 This project is in very early development, but already makes working with
-JSON configuration files a lot easier.
+JSON, CSON and YAML configuration files a lot easier.
 
 ### Installation
 
@@ -57,6 +57,9 @@ try {
   throw error;
 }
 ```
+
+You can swap out `config.json` for `config.cson`, `config.yaml` or `config.yml`.
+Everything will still work, and uses the exact same API as described below.
 
 ### Figson API
 
@@ -180,6 +183,33 @@ config.save(function(error) {
   if (error) { throw error; }
 });
 ```
+
+### Adding your own configuration file types
+
+Figson exposes a small interface for you to add your own configuration file
+handlers, if you wish to use a separate data format. Figson uses this interface
+internally to add support for JSON, CSON and YAML files.
+
+All you have to do is call `figson.addHandler(name, object)`, where `name` is
+the name of your handler (e.g. "CSON" for CSON files) and where `object` is
+a JavaScript object that lists file extensions as well as synchronous and
+asynchronous parse and stringify operations. For example, if you wanted to
+register JSON, you would do this:
+
+```javascript
+figson.addHandler('JSON', {
+  extensions: ['.json'],
+  parse: JSON.parse,
+  parseSync: JSON.parse,
+  stringify: JSON.stringify,
+  stringifySync: JSON.stringify
+});
+```
+
+Figson will automatically register the file extension to the correct data
+format. You can look in
+[lib/handlers](https://github.com/declandewet/figson/tree/master/lib/handlers)
+for other examples.
 
 Contributing:
 -------------
