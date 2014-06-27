@@ -1,11 +1,10 @@
 should                        = require('chai').should()
+expect                        = require('chai').expect
 fs                            = require 'fs'
 path                          = require 'path'
 nodefn                        = require 'when/node'
 {ends_with, flatten_object}   = require '../lib/util'
 figson                        = require '..'
-
-require('when/monitor/console')
 
 configFileJSON = path.join __dirname, 'fixtures', 'config.json'
 configFileCSON = path.join __dirname, 'fixtures', 'config.cson'
@@ -30,11 +29,11 @@ makeJSON = (fooProp) ->
 makeCSON = (fooProp) ->
   return """
   {
-    foo: '#{fooProp}'
+    foo: "#{fooProp}"
     long:
       deeply:
         nested:
-          property: ['support']
+          property: ["support"]
   }
   """
 
@@ -49,27 +48,34 @@ makeYAML = (fooProp) ->
 
   """
 
-expose_data = (c) -> c.data.should.deep.equal(JSON.parse(makeJSON('bar')))
+expose_data = (c) ->
+  console.log(c)
+  expect(c.data).to.deep.equal
+    foo: "bar"
+    long:
+      deeply:
+        nested:
+          property: ["support"]
 
-get_property = (c) -> c.get('foo').val().should.equal('bar')
+get_property = (c) -> expect(c.get('foo').val()).to.equal('bar')
 
-set_property = (c) -> c.set('fizz', 'buzz'); c.data.fizz.should.equal('buzz')
+set_property = (c) -> c.set('fizz', 'buzz'); expect(c.data.fizz).to.equal('buzz')
 
 destroy_property = (c) -> c.destroy('foo'); should.not.exist(c.data.foo)
 
-update_property = (c) -> c.update('foo', 'zoidberg'); c.data.foo.should.equal('zoidberg')
+update_property = (c) -> c.update('foo', 'zoidberg'); expect(c.data.foo).to.equal('zoidberg')
 
 cause_update_error = (c) -> (-> c.update('zar', 'zam')).should.throw(Error)
 
-set_deep_property = (c) -> c.get('long.deeply.nested.property[0]').val().should.equal('support')
+set_deep_property = (c) -> expect(c.get('long.deeply.nested.property[0]').val()).to.equal('support')
 
-use_find = (c) -> c.find('nested.property[0]').val().should.equal('support')
+use_find = (c) -> expect(c.find('nested.property[0]').val()).to.equal('support')
 
 chain_methods = (c) ->
-  c.get('foo').val().should.equal('bar')
-  c.set('baz').get().val().should.equal('baz')
-  c.set('prop', 'something').get().val().should.equal('something')
-  c.update('something else').get().val().should.equal('something else')
+  expect(c.get('foo').val()).to.equal('bar')
+  expect(c.set('baz').get().val()).to.equal('baz')
+  expect(c.set('prop', 'something').get().val()).to.equal('something')
+  expect(c.update('something else').get().val()).to.equal('something else')
   should.not.exist(c.destroy().get().val())
 
 describe 'utils', ->
@@ -270,12 +276,13 @@ describe 'YAML', ->
       contents = fs.readFileSync configFileYAML, encoding: 'utf8'
       contents.should.equal(makeYAML 'saved')
 
-describe 'CSON', ->
+describe.only 'CSON', ->
   afterEach -> fs.writeFileSync configFileCSON, makeCSON 'bar'
 
   describe 'async', ->
 
-    beforeEach -> @config = nodefn.call(figson.parse, configFileCSON)
+    beforeEach ->
+      @config = nodefn.call(figson.parse, configFileCSON)
 
     it 'should expose the data object', (done) ->
       @config.then expose_data

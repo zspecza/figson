@@ -1,7 +1,7 @@
 {
-  foo: 'bar'
+  foo: "bar"
   long:
     deeply:
       nested:
-        property: ['support']
+        property: ["support"]
 }
