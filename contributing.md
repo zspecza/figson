@@ -21,9 +21,7 @@ The goal with this library is to create a package that can handle saving to
 and reading from configuration files. Right now, it works with JSON; but the
 ultimate goal here is to be able to write adapters that map parsing logic
 to different file extensions, so that different file formats can be parsed. JSON,
-YAML and CSON are planned to be baked-in, but it should be possible to write
-an adapter to handle any file (XML, for example). If you can add this functionality
-before I do, please feel free to submit a pull request (with tests!).
+YAML and CSON are already baked-in and supported.
 
 Needs Refactoring
 -----------------

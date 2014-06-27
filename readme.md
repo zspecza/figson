@@ -169,7 +169,7 @@ config.find('nested.property').set('foobar') // done!
 
 #### config.save([callback])
 
-This saves the current state of `config.data` to the JSON file. This is a synchronous
+This saves the current state of `config.data` to the configuration file. This is a synchronous
 operation, but passing in an optional callback (`function(error) {}`) will make it
 perform asynchronously.
 
@@ -219,4 +219,4 @@ Please read the [contribution guidelines](https://github.com/declandewet/figson/
 Roadmap:
 --------
 
-- Add custom handler functionality
+- Address the need to call path.resolve and find a way to do it internally
