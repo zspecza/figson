@@ -26,7 +26,7 @@ class Parser
       nodefn.call fs.readFile, file, encoding: 'utf8'
         .then handler.parse
         .then (data) -> callback(null, new Config(handler, data))
-        .done null, callback.bind(callback)
+        .catch callback.bind(callback)
         ###**
          * exposes the config object or an error if any
          * @callback Parser~parseCallback

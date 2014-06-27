@@ -5,6 +5,8 @@ nodefn                        = require 'when/node'
 {ends_with, flatten_object}   = require '../lib/util'
 figson                        = require '..'
 
+require('when/monitor/console')
+
 configFileJSON = path.join __dirname, 'fixtures', 'config.json'
 configFileCSON = path.join __dirname, 'fixtures', 'config.cson'
 configFileYAML = path.join __dirname, 'fixtures', 'config.yml'
