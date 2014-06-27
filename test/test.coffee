@@ -49,7 +49,6 @@ makeYAML = (fooProp) ->
   """
 
 expose_data = (c) ->
-  console.log(c)
   expect(c.data).to.deep.equal
     foo: "bar"
     long:
@@ -276,7 +275,7 @@ describe 'YAML', ->
       contents = fs.readFileSync configFileYAML, encoding: 'utf8'
       contents.should.equal(makeYAML 'saved')
 
-describe.only 'CSON', ->
+describe 'CSON', ->
   afterEach -> fs.writeFileSync configFileCSON, makeCSON 'bar'
 
   describe 'async', ->

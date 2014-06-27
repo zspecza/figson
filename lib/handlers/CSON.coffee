@@ -1,8 +1,8 @@
-cson = require 'cson'
+cson = require 'cson-safe'
 
 module.exports =
   extensions: ['.cson']
   parse: cson.parse
-  parseSync: cson.parseSync
+  parseSync: cson.parse
   stringify: cson.stringify
-  stringifySync: cson.stringifySync
+  stringifySync: cson.stringify
