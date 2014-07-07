@@ -5,7 +5,7 @@ Parser   = require './parser'
 figson   = new Parser()
 
 # read the `./lib/handlers/` directory and iterate each file as 'handler'
-W.map(nodefn.call(fs.readdir, './lib/handlers/'), (handler) ->
+W.map nodefn.call(fs.readdir, './lib/handlers/'), (handler) ->
 
   # remove the file extension from the handler filename
   handler = handler.substr(0, handler.lastIndexOf('.'))
@@ -13,6 +13,6 @@ W.map(nodefn.call(fs.readdir, './lib/handlers/'), (handler) ->
   # add the handler to Figson's internal handler store
   figson.addHandler handler, require('./handlers/' + handler)
 
-).done(null, console.error.bind(console))
+.catch (error) -> W.reject(new Error(error))
 
 module.exports = figson
