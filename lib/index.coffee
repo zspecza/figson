@@ -4,15 +4,13 @@ fs       = require 'fs'
 Parser   = require './parser'
 figson   = new Parser()
 
-# read the `./lib/handlers/` directory and iterate each file as 'handler'
-W.map(nodefn.call(fs.readdir, './lib/handlers/'), (handler) ->
+json_handler = require './handlers/JSON'
+cson_handler = require './handlers/CSON'
+yaml_handler = require './handlers/YAML'
 
-  # remove the file extension from the handler filename
-  handler = handler.substr(0, handler.lastIndexOf('.'))
-
-  # add the handler to Figson's internal handler store
-  figson.addHandler handler, require('./handlers/' + handler)
-
-).done(null, console.error.bind(console))
+# add file type handlers
+figson.addHandler 'JSON', json_handler
+figson.addHandler 'CSON', cson_handler
+figson.addHandler 'YAML', yaml_handler
 
 module.exports = figson

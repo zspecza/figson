@@ -34,7 +34,7 @@ Usage
 var figson = require('figson');
 var path   = require('path');
 
-figson.parse(path.resolve('./config.json'), function(error, config) {
+figson.parse('./config.json', function(error, config) {
   if (error) { throw error; }
   config.set('foo', 'bar');
   config.save(function(error) {
@@ -50,7 +50,7 @@ var figson = require('figson');
 var path   = require('path');
 
 try {
-  var config = figson.parse(path.resolve('./config.json');
+  var config = figson.parse('./config.json');
   config.set('foo', 'bar');
   config.save();
 } catch (error) {
@@ -215,8 +215,3 @@ Contributing:
 -------------
 
 Please read the [contribution guidelines](https://github.com/declandewet/figson/blob/master/contributing.md).
-
-Roadmap:
---------
-
-- Address the need to call path.resolve and find a way to do it internally
