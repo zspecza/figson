@@ -21,6 +21,7 @@ class Parser
    * @return {Object} - the config object representing the config file
   ###
   parse: (file, callback) =>
+    file    = path.resolve(file)
     handler = get_handler.call(@, file)
     if callback?
       nodefn.call fs.readFile, file, encoding: 'utf8'
