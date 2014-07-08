@@ -11,7 +11,7 @@
     "configuration",
     "configure"
   ],
-  "main": "index.js",
+  "main": "lib",
   "license": "MIT",
   "repository": {
     "type": "git",
