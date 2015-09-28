@@ -35,18 +35,18 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
-    "coffee-script": "^1.7.1",
-    "mocha": "^1.18.2",
+    "chai": "1.10.0",
+    "coffee-script": "1.10.0",
+    "mocha": "1.21.5",
     "mocha-lcov-reporter": "0.0.1",
-    "istanbul": "^0.2.7",
-    "coveralls": "^2.10.0"
+    "istanbul": "0.2.16",
+    "coveralls": "2.11.4"
   },
   "dependencies": {
-    "lodash": "^2.4.1",
-    "pathval": "^0.1.1",
-    "when": "^3.1.0",
-    "js-yaml": "^3.0.2",
-    "cson-safe": "^0.1.1"
+    "lodash": "2.4.2",
+    "pathval": "0.1.1",
+    "when": "3.7.3",
+    "js-yaml": "3.4.2",
+    "cson-safe": "0.1.1"
   }
 }
