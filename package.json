@@ -39,7 +39,7 @@
     "coffee-script": "1.10.0",
     "mocha": "1.21.5",
     "mocha-lcov-reporter": "0.0.1",
-    "istanbul": "0.2.16",
+    "istanbul": "0.3.21",
     "coveralls": "2.11.4"
   },
   "dependencies": {
