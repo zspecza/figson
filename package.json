@@ -45,7 +45,7 @@
   "dependencies": {
     "lodash": "4.13.1",
     "pathval": "0.1.1",
-    "when": "3.7.5",
+    "when": "3.7.6",
     "js-yaml": "3.6.1",
     "cson-safe": "0.1.1"
   }
