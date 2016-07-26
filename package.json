@@ -43,7 +43,7 @@
     "coveralls": "2.11.11"
   },
   "dependencies": {
-    "lodash": "4.13.1",
+    "lodash": "4.14.0",
     "pathval": "0.1.1",
     "when": "3.7.7",
     "js-yaml": "3.6.1",
