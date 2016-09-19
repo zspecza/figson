@@ -40,7 +40,7 @@
     "mocha": "3.0.2",
     "mocha-lcov-reporter": "1.2.0",
     "istanbul": "0.4.4",
-    "coveralls": "2.11.12"
+    "coveralls": "2.11.14"
   },
   "dependencies": {
     "lodash": "4.15.0",
