@@ -37,7 +37,7 @@
   "devDependencies": {
     "chai": "3.5.0",
     "coffee-script": "1.10.0",
-    "mocha": "3.0.2",
+    "mocha": "3.1.0",
     "mocha-lcov-reporter": "1.2.0",
     "istanbul": "0.4.4",
     "coveralls": "2.11.12"
